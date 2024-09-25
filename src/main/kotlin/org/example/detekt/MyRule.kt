@@ -1,27 +1,29 @@
 package org.example.detekt
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtProperty
 
-class MyRule(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        Severity.CodeSmell,
-        "Custom Rule",
-        Debt.FIVE_MINS,
-    )
+class IgnoreHeightMagicNumber(config: Config) : Rule(config) {
+    override val issue: Issue
+        get() = Issue(javaClass.simpleName, Severity.Style, "Height magic number", Debt())
 
-    override fun visitClass(klass: KtClass) {
-        super.visitClass(klass)
-
-        if (klass.isInner()) {
-            report(CodeSmell(issue, Entity.atName(klass), "Custom message"))
+    override fun visitProperty(property: KtProperty) {
+        super.visitProperty(property)
+        // Check if the property name contains 'height' and is a DP value
+        if (property.name?.contains("height", ignoreCase = true) == true && isDpValue(property)) {
+            // Ignore magic number checks for this property
+            return
         }
+    }
+
+    private fun isDpValue(property: KtProperty): Boolean {
+        // Implement logic to determine if the property value is in DP
+        // This might involve checking the property's initializer or type
+        // For example, check if it ends with 'dp'
+        return property.initializer?.text?.endsWith("dp") == true
     }
 }
