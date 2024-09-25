@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.psi.KtProperty
 
 class IgnoreHeightMagicNumber(config: Config) : Rule(config) {
     override val issue: Issue
-        get() = Issue(javaClass.simpleName, Severity.Style, "Height magic number", Debt())
+        get() = Issue(javaClass.simpleName, Severity.Style, "Height magic number", Debt.FIVE_MINS)
 
     override fun visitProperty(property: KtProperty) {
          if (property.name?.contains("height", ignoreCase = true) == true && isDpValue(property)) {
