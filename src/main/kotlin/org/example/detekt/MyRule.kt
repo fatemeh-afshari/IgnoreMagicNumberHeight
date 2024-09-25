@@ -12,12 +12,12 @@ class IgnoreHeightMagicNumber(config: Config) : Rule(config) {
         get() = Issue(javaClass.simpleName, Severity.Style, "Height magic number", Debt())
 
     override fun visitProperty(property: KtProperty) {
-        super.visitProperty(property)
-        // Check if the property name contains 'height' and is a DP value
-        if (property.name?.contains("height", ignoreCase = true) == true && isDpValue(property)) {
+         if (property.name?.contains("height", ignoreCase = true) == true && isDpValue(property)) {
             // Ignore magic number checks for this property
             return
         }
+        super.visitProperty(property)
+        // Check if the property name contains 'height' and is a DP value
     }
 
     private fun isDpValue(property: KtProperty): Boolean {
